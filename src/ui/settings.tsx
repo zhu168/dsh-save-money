@@ -237,6 +237,7 @@ export function createSettingsView(deps: any) {
       React.createElement('div', { style: { margin: '8px 0', display: 'flex', alignItems: 'center', gap: '18px', flexWrap: 'wrap' } },
         switchRow(t('enable'), !!st.enabled, (v: boolean) => void doConfigure({ enabled: v })),
         switchRow(t('showBalance'), !!cfg.showBalance, (v: boolean) => void doConfigure({ showBalance: v })),
+        switchRow(t('showOpenCodeGo'), !!cfg.showOpenCodeGo, (v: boolean) => void doConfigure({ showOpenCodeGo: v })),
       ),
       // Model tiers: checked = this tier pauses inside windows; unchecked =
       // exempt. Two rows — official / opencode — each with flash + pro

@@ -31,6 +31,8 @@ export interface SaveMoneyConfig {
   reconcileOnStart: boolean
   lang: LangChoice
   showBalance: boolean
+  showOpenCodeGo: boolean
+  displaySource: string
   modelApply: ModelApply
 }
 
@@ -43,6 +45,11 @@ export const CONFIG_DEFAULTS: SaveMoneyConfig = {
   reconcileOnStart: true,
   lang: 'auto',
   showBalance: false,
+  // OpenCode Go quota display is ON by default: a configured opencode-go
+  // (OPENCODE_GO_API_KEY present) shows its 5h/week/month usage immediately,
+  // matching "I configured opencode-go, so show its quota".
+  showOpenCodeGo: true,
+  displaySource: 'auto',
   modelApply: {
     'official-flash': true,
     'official-pro': true,
@@ -53,6 +60,12 @@ export const CONFIG_DEFAULTS: SaveMoneyConfig = {
 
 export const LANGS: LangChoice[] = ['auto', 'zh', 'zh-TW', 'en', 'de', 'fr', 'es', 'it', 'pt', 'ja', 'ko']
 export const MODEL_APPLY_KEYS = ['official-flash', 'official-pro', 'opencode-flash', 'opencode-pro'] as const
+
+/** Known header display sources (which provider's data to show). */
+export const DISPLAY_SOURCES = ['auto', 'deepseek-official', 'opencode-go'] as const
+export function isKnownDisplaySource(s: string): boolean {
+  return (DISPLAY_SOURCES as readonly string[]).includes(s)
+}
 
 export const CONFIG_FILE = 'save-money.config.json'
 export const POINTER_FILE = 'save-money-config-path.json'
@@ -181,6 +194,11 @@ function candidateRoots(deps: ConfigDeps, defaultWorkspaceRoot: string): string[
   } catch (e) { /* skip */ }
   // 5. sandboxPolicy fallback (the harness install dir).
   push(defaultWorkspaceRoot)
+  // 6. the DSH user dir (account-level, always reachable): a reliability net
+  //    when no session/workspace candidate is usable, and — with DSH_HOME set
+  //    (the managed desktop deploy) — the preferred home (same location the
+  //    balance history already persists to, so writes are guaranteed to work).
+  push(dshHome())
   return out
 }
 
@@ -227,15 +245,17 @@ export function createConfig(deps: ConfigDeps) {
         return dir
       } catch (e) { /* no config here — try next */ }
     }
-    // No config exists anywhere yet: prefer a repo-named candidate (the
-    // sibling-directory layout from the README, or a session cwd), so a fresh
-    // install writes next to the checkout instead of polluting the harness
-    // install dir; fall back to the first candidate.
+    // No config anywhere yet: prefer a repo-named candidate (README layout);
+    // on the managed desktop deploy (DSH_HOME set) the cwd resolution can
+    // yield an unwritable bogus path (e.g. "C:\\Users\\dsh-save-money"), so
+    // prefer the DSH user dir — guaranteed writable.
     let target = ''
     for (const dir of roots) {
       if (dir && /dsh-save-money$/i.test(dir)) { target = dir; break }
     }
-    resolvedConfigDir = target || roots[0] || defaultWorkspaceRoot
+    const home = dshHome()
+    const managed = !!(typeof process !== 'undefined' && process && process.env && process.env.DSH_HOME)
+    resolvedConfigDir = (managed && home ? home : (target || roots[0])) || defaultWorkspaceRoot
     return resolvedConfigDir
   }
 
@@ -279,6 +299,8 @@ export function createConfig(deps: ConfigDeps) {
       if (typeof data.warnMinutes === 'number' && data.warnMinutes >= 0) next.warnMinutes = data.warnMinutes
       if (typeof data.reconcileOnStart === 'boolean') next.reconcileOnStart = data.reconcileOnStart
       if (typeof data.showBalance === 'boolean') next.showBalance = data.showBalance
+      if (typeof data.showOpenCodeGo === 'boolean') next.showOpenCodeGo = data.showOpenCodeGo
+      if (typeof data.displaySource === 'string' && isKnownDisplaySource(data.displaySource)) next.displaySource = data.displaySource
       if (data.lang === 'auto' || data.lang === 'zh' || data.lang === 'zh-TW' || data.lang === 'en' ||
           data.lang === 'de' || data.lang === 'fr' || data.lang === 'es' || data.lang === 'it' ||
           data.lang === 'pt' || data.lang === 'ja' || data.lang === 'ko') next.lang = data.lang
@@ -315,7 +337,7 @@ export function createConfig(deps: ConfigDeps) {
     // config object. Boolean fields are type-checked below.
     const p: any = (patch && typeof patch === 'object') ? patch : {}
     const next: any = { ...cfgRef.cfg }
-    for (const key of ['enabled', 'timezone', 'warnMinutes', 'windows', 'reconcileOnStart', 'lang', 'showBalance', 'modelApply'] as const) {
+    for (const key of ['enabled', 'timezone', 'warnMinutes', 'windows', 'reconcileOnStart', 'lang', 'showBalance', 'showOpenCodeGo', 'displaySource', 'modelApply'] as const) {
       if (p[key] !== undefined) next[key] = p[key]
     }
     if (next.windows === undefined) next.windows = []
@@ -335,6 +357,12 @@ export function createConfig(deps: ConfigDeps) {
     }
     if (next.showBalance !== undefined && typeof next.showBalance !== 'boolean') {
       return { ok: false, error: 'showBalance must be a boolean' }
+    }
+    if (next.showOpenCodeGo !== undefined && typeof next.showOpenCodeGo !== 'boolean') {
+      return { ok: false, error: 'showOpenCodeGo must be a boolean' }
+    }
+    if (next.displaySource !== undefined && !isKnownDisplaySource(next.displaySource)) {
+      return { ok: false, error: 'displaySource must be auto/deepseek-official/opencode-go' }
     }
     if (next.modelApply !== undefined) {
       if (!next.modelApply || typeof next.modelApply !== 'object') {
@@ -376,6 +404,8 @@ export function createConfig(deps: ConfigDeps) {
       reconcileOnStart: cfgRef.cfg.reconcileOnStart,
       lang: cfgRef.cfg.lang,
       showBalance: cfgRef.cfg.showBalance,
+      showOpenCodeGo: cfgRef.cfg.showOpenCodeGo,
+      displaySource: cfgRef.cfg.displaySource,
       modelApply: { ...cfgRef.cfg.modelApply },
       windows: cfgRef.cfg.windows.map((w) => ({ ...w })),
     }

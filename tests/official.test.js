@@ -268,7 +268,7 @@ async function configureAndGetBalance(handler, patch) {
 
 test('official balance endpoint: hidden by default (opt-in showBalance=false)', async () => {
   const handler = await applyForBalance()
-  const out = await configureAndGetBalance(handler, { showBalance: false })
+  const out = await configureAndGetBalance(handler, { showBalance: false, showOpenCodeGo: false })
   assert.equal(out.ok, false)
   assert.match(out.error, /disabled/)
 })
@@ -282,12 +282,12 @@ test('official balance endpoint: enabling showBalance reveals the credential err
 
 test('official balance display switch: off by default, enable works, disable hides again', async () => {
   const handler = await applyForBalance()
-  const off1 = await configureAndGetBalance(handler, { showBalance: false })
+  const off1 = await configureAndGetBalance(handler, { showBalance: false, showOpenCodeGo: false })
   assert.match(off1.error, /disabled/)
   const on = await configureAndGetBalance(handler, { showBalance: true })
   assert.equal(on.ok, false)
   assert.match(on.error, /credential/) // gated by the opt-in switch, not the guard
-  const off2 = await configureAndGetBalance(handler, { showBalance: false })
+  const off2 = await configureAndGetBalance(handler, { showBalance: false, showOpenCodeGo: false })
   assert.match(off2.error, /disabled/)
 })
 

@@ -56,6 +56,24 @@ export interface Dict {
   sectionLabel: string
   settingsHeading: string
   showBalance: string
+  // OpenCode Go usage display (v1.5.0). Optional so the non-zh/en locales can
+  // omit them and fall back to English via t().
+  showOpenCodeGo?: string
+  goTitle?: string
+  goWindow5h?: string
+  goWindowWeek?: string
+  goWindowMonth?: string
+  goRemaining?: string
+  goUsed?: string
+  goReset?: string
+  goNone?: string
+  // Header display-source selector (which provider's data to show).
+  displayTitle?: string
+  srcAuto?: string
+  srcDeepseek?: string
+  srcGo?: string
+  srcInUse?: string
+  srcChart?: string
   modelApplyTitle: string
   modelApplyHint: string
   applyOfficial: string

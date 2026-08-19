@@ -716,6 +716,179 @@ async function fetchBalance(ctx, sandbox) {
     }
 }
 /**
+ * dsh-save-money — OpenCode Go usage transport (Host side).
+ *
+ * Fetches the OpenCode Go plan-window usage from OpenCode's official usage
+ * endpoint and fails closed on any error, exactly like the DeepSeek balance
+ * transport in src/balance-host.ts:
+ *
+ *   GET https://opencode.ai/zen/go/v1/usage
+ *   Authorization: Bearer <opencode-go key>    (+ x-api-key belt-and-suspenders)
+ *
+ *   → { usage: { rolling:  { percent, resetsAt },
+ *                weekly:   { percent, resetsAt },
+ *                monthly:  { percent, resetsAt } } }
+ *
+ * `percent` is the USED percent (0-100, integer) per window; the client shows
+ * the REMAINING percent (100 - percent) plus the reset countdown. The values
+ * are account-wide and match OpenCode's own dashboard accounting.
+ *
+ * Inlined into the host plugin body at build time (scripts/build.js): no
+ * imports survive, so cross-module references are `declare`d for standalone
+ * type-checking and resolve to the inlined scope at runtime.
+ */
+/** Cache window; the header polls the balance endpoint, so keep the upstream call rare. */
+const GO_CACHE_MS = 60000;
+/** Hard ceiling for one upstream attempt (see balance-host.ts for rationale). */
+const GO_TIMEOUT_MS = 5000;
+/** Official OpenCode Go usage endpoint (auth via Bearer + x-api-key). */
+const GO_USAGE_URL = 'https://opencode.ai/zen/go/v1/usage';
+/**
+ * Race a promise against a timeout so a hung subprocess or service call can
+ * NEVER pin the usage service (and therefore the plugin) forever.
+ */
+function goWithTimeout(p, ms, message) {
+    return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => reject(new Error(message)), ms);
+        p.then((v) => { clearTimeout(timer); resolve(v); }, (e) => { clearTimeout(timer); reject(e); });
+    });
+}
+/**
+ * Create the OpenCode Go usage service for one plugin instance.
+ * @param ctx - plugin context (ctx.get for credentials / subprocess).
+ * @param opts.sandbox - true in the dynamic-plugin sandbox (no real fetch);
+ *   false in the official module form (Node fetch available).
+ */
+function createGoUsageService(ctx, opts) {
+    let cache = null;
+    let inFlight = null;
+    return {
+        query() {
+            const now = Date.now();
+            if (cache && now - cache.at < GO_CACHE_MS)
+                return Promise.resolve(cache.data);
+            if (inFlight)
+                return inFlight;
+            inFlight = (async () => {
+                let out;
+                try {
+                    out = await goWithTimeout(fetchGoUsage(ctx, opts.sandbox), GO_TIMEOUT_MS, 'opencode go usage upstream timeout');
+                }
+                catch (e) {
+                    out = { ok: false, error: String((e && e.message) || e) };
+                }
+                cache = { at: Date.now(), data: out };
+                return out;
+            })().finally(() => { inFlight = null; });
+            return inFlight;
+        },
+    };
+}
+/**
+ * Resolve the opencode-go API key from DSH credentials (the same store that
+ * holds DEEPSEEK_API_KEY; the key is saved under OPENCODE_GO_API_KEY).
+ */
+async function resolveGoKey(ctx) {
+    const creds = ctx.get('credentials');
+    if (!creds || typeof creds.resolve !== 'function')
+        return undefined;
+    return creds.resolve('OPENCODE_GO_API_KEY').then((r) => r && r.value).catch(() => undefined);
+}
+/** Normalize one window object ({status, percent, resetsAt}); null when absent. */
+function pickWindow(w) {
+    if (!w || typeof w !== 'object')
+        return null;
+    return {
+        status: typeof w.status === 'string' ? w.status : '',
+        percent: typeof w.percent === 'number' ? w.percent : null,
+        resetsAt: typeof w.resetsAt === 'string' && w.resetsAt.length > 0 ? w.resetsAt : null,
+    };
+}
+/** One upstream usage request (no caching; see the service wrapper). */
+async function fetchGoUsage(ctx, sandbox) {
+    const key = await resolveGoKey(ctx);
+    if (!key)
+        return { ok: false, error: 'no OPENCODE_GO_API_KEY credential' };
+    try {
+        let status = 0;
+        let text = '';
+        if (!sandbox && typeof fetch === 'function') {
+            // Official module form runs in Node: real fetch is available.
+            const res = await fetch(GO_USAGE_URL, {
+                headers: {
+                    authorization: 'Bearer ' + key,
+                    'x-api-key': key,
+                    accept: 'application/json',
+                },
+                signal: typeof AbortSignal !== 'undefined' && AbortSignal && typeof AbortSignal.timeout === 'function'
+                    ? AbortSignal.timeout(10000)
+                    : undefined,
+            });
+            status = res.status;
+            text = await res.text();
+        }
+        else {
+            // Dynamic sandbox: `fetch` exists but is a guard stub that throws on
+            // call — run curl via the subprocess service (mirrors balance-host.ts).
+            const sub = ctx.get('subprocess');
+            if (!sub || typeof sub.spawn !== 'function') {
+                return { ok: false, error: 'no fetch or subprocess available for opencode go usage' };
+            }
+            let done = null;
+            let raw = '';
+            try {
+                const handle = sub.spawn({
+                    argv: ['curl', '-sS', '-f', '-m', '10',
+                        '-H', 'Authorization: Bearer ' + key,
+                        '-H', 'x-api-key: ' + key,
+                        '-H', 'Accept: application/json',
+                        GO_USAGE_URL],
+                    cwd: '.',
+                    stdio: { stdin: 'ignore', stdout: { maxBytes: 65536 }, stderr: { maxBytes: 4096 } },
+                    graceMs: 12000,
+                });
+                const settle = typeof handle.done === 'function'
+                    ? goWithTimeout(Promise.resolve(handle.done()), GO_TIMEOUT_MS, 'opencode go usage curl timeout')
+                    : goWithTimeout(Promise.resolve(handle.done), GO_TIMEOUT_MS, 'opencode go usage curl timeout');
+                done = await settle;
+                try {
+                    if (handle && typeof handle.kill === 'function')
+                        handle.kill();
+                }
+                catch (e) { /* best-effort */ }
+                const collected = handle.collected && handle.collected.stdout;
+                raw = collected && typeof collected.readFrom === 'function'
+                    ? collected.readFrom(0).text
+                    : '';
+            }
+            catch (e) {
+                return { ok: false, error: 'opencode go usage subprocess failed: ' + String((e && e.message) || e) };
+            }
+            status = done && done.exitCode === 0 ? 200 : (done && typeof done.exitCode === 'number' ? done.exitCode : 0);
+            text = raw || '';
+        }
+        let data = null;
+        try {
+            data = JSON.parse(text);
+        }
+        catch (e) { /* non-JSON body */ }
+        const usage = data && typeof data === 'object' ? data.usage : null;
+        if (usage && typeof usage === 'object') {
+            return {
+                ok: status >= 200 && status < 300,
+                httpStatus: status,
+                rolling: pickWindow(usage.rolling),
+                weekly: pickWindow(usage.weekly),
+                monthly: pickWindow(usage.monthly),
+            };
+        }
+        return { ok: false, httpStatus: status, error: 'unexpected response: ' + text.slice(0, 200) };
+    }
+    catch (e) {
+        return { ok: false, error: String((e && e.message) || e) };
+    }
+}
+/**
  * dsh-save-money — Config controller (single source of truth for settings).
  *
  * Owns the persisted settings: defaults, validation, load/persist to the
@@ -737,6 +910,11 @@ const CONFIG_DEFAULTS = {
     reconcileOnStart: true,
     lang: 'auto',
     showBalance: false,
+    // OpenCode Go quota display is ON by default: a configured opencode-go
+    // (OPENCODE_GO_API_KEY present) shows its 5h/week/month usage immediately,
+    // matching "I configured opencode-go, so show its quota".
+    showOpenCodeGo: true,
+    displaySource: 'auto',
     modelApply: {
         'official-flash': true,
         'official-pro': true,
@@ -746,6 +924,11 @@ const CONFIG_DEFAULTS = {
 };
 const LANGS = ['auto', 'zh', 'zh-TW', 'en', 'de', 'fr', 'es', 'it', 'pt', 'ja', 'ko'];
 const MODEL_APPLY_KEYS = ['official-flash', 'official-pro', 'opencode-flash', 'opencode-pro'];
+/** Known header display sources (which provider's data to show). */
+const DISPLAY_SOURCES = ['auto', 'deepseek-official', 'opencode-go'];
+function isKnownDisplaySource(s) {
+    return DISPLAY_SOURCES.includes(s);
+}
 const CONFIG_FILE = 'save-money.config.json';
 const POINTER_FILE = 'save-money-config-path.json';
 // Pure time helpers inlined from src/core.ts at build time — the `import`
@@ -861,6 +1044,11 @@ function candidateRoots(deps, defaultWorkspaceRoot) {
     catch (e) { /* skip */ }
     // 5. sandboxPolicy fallback (the harness install dir).
     push(defaultWorkspaceRoot);
+    // 6. the DSH user dir (account-level, always reachable): a reliability net
+    //    when no session/workspace candidate is usable, and — with DSH_HOME set
+    //    (the managed desktop deploy) — the preferred home (same location the
+    //    balance history already persists to, so writes are guaranteed to work).
+    push(dshHome());
     return out;
 }
 /**
@@ -909,10 +1097,10 @@ function createConfig(deps) {
             }
             catch (e) { /* no config here — try next */ }
         }
-        // No config exists anywhere yet: prefer a repo-named candidate (the
-        // sibling-directory layout from the README, or a session cwd), so a fresh
-        // install writes next to the checkout instead of polluting the harness
-        // install dir; fall back to the first candidate.
+        // No config anywhere yet: prefer a repo-named candidate (README layout);
+        // on the managed desktop deploy (DSH_HOME set) the cwd resolution can
+        // yield an unwritable bogus path (e.g. "C:\\Users\\dsh-save-money"), so
+        // prefer the DSH user dir — guaranteed writable.
         let target = '';
         for (const dir of roots) {
             if (dir && /dsh-save-money$/i.test(dir)) {
@@ -920,7 +1108,9 @@ function createConfig(deps) {
                 break;
             }
         }
-        resolvedConfigDir = target || roots[0] || defaultWorkspaceRoot;
+        const home = dshHome();
+        const managed = !!(typeof process !== 'undefined' && process && process.env && process.env.DSH_HOME);
+        resolvedConfigDir = (managed && home ? home : (target || roots[0])) || defaultWorkspaceRoot;
         return resolvedConfigDir;
     };
     const persistConfig = async () => {
@@ -969,6 +1159,10 @@ function createConfig(deps) {
                 next.reconcileOnStart = data.reconcileOnStart;
             if (typeof data.showBalance === 'boolean')
                 next.showBalance = data.showBalance;
+            if (typeof data.showOpenCodeGo === 'boolean')
+                next.showOpenCodeGo = data.showOpenCodeGo;
+            if (typeof data.displaySource === 'string' && isKnownDisplaySource(data.displaySource))
+                next.displaySource = data.displaySource;
             if (data.lang === 'auto' || data.lang === 'zh' || data.lang === 'zh-TW' || data.lang === 'en' ||
                 data.lang === 'de' || data.lang === 'fr' || data.lang === 'es' || data.lang === 'it' ||
                 data.lang === 'pt' || data.lang === 'ja' || data.lang === 'ko')
@@ -1008,7 +1202,7 @@ function createConfig(deps) {
         // config object. Boolean fields are type-checked below.
         const p = (patch && typeof patch === 'object') ? patch : {};
         const next = { ...cfgRef.cfg };
-        for (const key of ['enabled', 'timezone', 'warnMinutes', 'windows', 'reconcileOnStart', 'lang', 'showBalance', 'modelApply']) {
+        for (const key of ['enabled', 'timezone', 'warnMinutes', 'windows', 'reconcileOnStart', 'lang', 'showBalance', 'showOpenCodeGo', 'displaySource', 'modelApply']) {
             if (p[key] !== undefined)
                 next[key] = p[key];
         }
@@ -1031,6 +1225,12 @@ function createConfig(deps) {
         }
         if (next.showBalance !== undefined && typeof next.showBalance !== 'boolean') {
             return { ok: false, error: 'showBalance must be a boolean' };
+        }
+        if (next.showOpenCodeGo !== undefined && typeof next.showOpenCodeGo !== 'boolean') {
+            return { ok: false, error: 'showOpenCodeGo must be a boolean' };
+        }
+        if (next.displaySource !== undefined && !isKnownDisplaySource(next.displaySource)) {
+            return { ok: false, error: 'displaySource must be auto/deepseek-official/opencode-go' };
         }
         if (next.modelApply !== undefined) {
             if (!next.modelApply || typeof next.modelApply !== 'object') {
@@ -1073,6 +1273,8 @@ function createConfig(deps) {
             reconcileOnStart: cfgRef.cfg.reconcileOnStart,
             lang: cfgRef.cfg.lang,
             showBalance: cfgRef.cfg.showBalance,
+            showOpenCodeGo: cfgRef.cfg.showOpenCodeGo,
+            displaySource: cfgRef.cfg.displaySource,
             modelApply: { ...cfgRef.cfg.modelApply },
             windows: cfgRef.cfg.windows.map((w) => ({ ...w })),
         };
@@ -1505,6 +1707,7 @@ function createGate(deps) {
  */
 function createBalanceTracker(ctx, S, deps) {
     const balanceSvc = createBalanceService(ctx, { sandbox: deps.sandbox });
+    const goSvc = createGoUsageService(ctx, { sandbox: deps.sandbox });
     const balanceHistory = createBalanceHistory();
     const historyFile = (() => {
         const home = dshHome();
@@ -1608,13 +1811,17 @@ function createBalanceTracker(ctx, S, deps) {
         catch (e) { /* the sampler must never throw */ }
     };
     const balanceQuery = async () => {
-        if (!deps.getCfg().showBalance)
+        const cfgQ = deps.getCfg();
+        const wantsBalance = cfgQ.showBalance === true;
+        const wantsGo = cfgQ.showOpenCodeGo === true;
+        if (!wantsBalance && !wantsGo)
             return { ok: false, error: 'balance display is disabled' };
-        const out = await balanceSvc.query();
-        S.balanceDirty = false; // a fresh balance was just fetched for the client
+        const out = wantsBalance ? await balanceSvc.query() : { ok: false, error: 'balance not enabled' };
+        const goUsage = wantsGo ? await goSvc.query() : null;
+        S.balanceDirty = false; // a fresh balance (+ go usage) was just fetched for the client
         // Record this balance as the newest sample (deduped inside the window),
-        // then attach the spend stats.
-        if (out && out.ok && Array.isArray(out.balance) && out.balance.length > 0 && typeof out.balance[0].total === 'string') {
+        // then attach the spend stats (DeepSeek balance only).
+        if (wantsBalance && out && out.ok && Array.isArray(out.balance) && out.balance.length > 0 && typeof out.balance[0].total === 'string') {
             const total = parseFloat(out.balance[0].total);
             if (Number.isFinite(total))
                 recordBalance(total);
@@ -1632,8 +1839,17 @@ function createBalanceTracker(ctx, S, deps) {
             h1: alignedNow - 60 * 60 * 1000,
             // h24 spans days: no HH:mm range label (avoids yesterday/today ambiguity)
         };
+        // top-level ok = any enabled sub-source succeeded, so the client can
+        // store the response and keep the OpenCode Go usage even when the DeepSeek
+        // balance itself is unavailable (no credential / relay baseURL / failure).
+        const base = wantsBalance ? out : { ok: false, error: 'balance not enabled' };
+        const ok = !!((base && base.ok === true) || (goUsage && goUsage.ok === true));
         return {
-            ...out,
+            ...base,
+            ok,
+            // OpenCode Go plan-window usage ({ rolling, weekly, monthly } with
+            // percent + resetsAt), null when the display is disabled.
+            goUsage,
             // Provider of the most recent model request: null when no request has
             // been made yet (show the balance — the official account is queryable),
             // otherwise the client shows the balance only for 'deepseek-official'.
