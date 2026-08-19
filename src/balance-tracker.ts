@@ -27,6 +27,7 @@ declare const dshHome: () => string
 declare const BALANCE_HISTORY_FILE: string
 declare const SAMPLE_MS: number
 declare function createBalanceService(ctx: any, opts: { sandbox: boolean }): { query(): Promise<any> }
+declare function createGoUsageService(ctx: any, opts: { sandbox: boolean }): { query(): Promise<any> }
 declare function createBalanceHistory(): {
   record(total: number, at?: number, activity?: boolean): void
   latest(): number | null
@@ -53,6 +54,7 @@ declare function alignWallClock(tz: string, ms: number, stepMs: number): number 
  */
 export function createBalanceTracker(ctx: any, S: any, deps: { getFs: () => any; getCfg: () => any; sandbox: boolean }) {
   const balanceSvc = createBalanceService(ctx, { sandbox: deps.sandbox })
+  const goSvc = createGoUsageService(ctx, { sandbox: deps.sandbox })
   const balanceHistory = createBalanceHistory()
   const historyFile = (() => {
     const home = dshHome()
@@ -149,12 +151,16 @@ export function createBalanceTracker(ctx: any, S: any, deps: { getFs: () => any;
     } catch (e) { /* the sampler must never throw */ }
   }
   const balanceQuery = async (): Promise<any> => {
-    if (!deps.getCfg().showBalance) return { ok: false, error: 'balance display is disabled' }
-    const out = await balanceSvc.query()
-    S.balanceDirty = false // a fresh balance was just fetched for the client
+    const cfgQ = deps.getCfg()
+    const wantsBalance = cfgQ.showBalance === true
+    const wantsGo = cfgQ.showOpenCodeGo === true
+    if (!wantsBalance && !wantsGo) return { ok: false, error: 'balance display is disabled' }
+    const out = wantsBalance ? await balanceSvc.query() : { ok: false, error: 'balance not enabled' }
+    const goUsage = wantsGo ? await goSvc.query() : null
+    S.balanceDirty = false // a fresh balance (+ go usage) was just fetched for the client
     // Record this balance as the newest sample (deduped inside the window),
-    // then attach the spend stats.
-    if (out && out.ok && Array.isArray(out.balance) && out.balance.length > 0 && typeof out.balance[0].total === 'string') {
+    // then attach the spend stats (DeepSeek balance only).
+    if (wantsBalance && out && out.ok && Array.isArray(out.balance) && out.balance.length > 0 && typeof out.balance[0].total === 'string') {
       const total = parseFloat(out.balance[0].total)
       if (Number.isFinite(total)) recordBalance(total)
     }
@@ -171,8 +177,17 @@ export function createBalanceTracker(ctx: any, S: any, deps: { getFs: () => any;
       h1: alignedNow - 60 * 60 * 1000,
       // h24 spans days: no HH:mm range label (avoids yesterday/today ambiguity)
     }
+    // top-level ok = any enabled sub-source succeeded, so the client can
+    // store the response and keep the OpenCode Go usage even when the DeepSeek
+    // balance itself is unavailable (no credential / relay baseURL / failure).
+    const base = wantsBalance ? out : { ok: false, error: 'balance not enabled' }
+    const ok = !!((base && base.ok === true) || (goUsage && goUsage.ok === true))
     return {
-      ...out,
+      ...base,
+      ok,
+      // OpenCode Go plan-window usage ({ rolling, weekly, monthly } with
+      // percent + resetsAt), null when the display is disabled.
+      goUsage,
       // Provider of the most recent model request: null when no request has
       // been made yet (show the balance — the official account is queryable),
       // otherwise the client shows the balance only for 'deepseek-official'.

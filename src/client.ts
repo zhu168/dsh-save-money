@@ -118,7 +118,7 @@ return {
     // currentLang at call time, so UI text follows the persisted language.
     const ui = createUi({ t: translate, detectedTz, DSHButton })
 
-    let snapshot: any = { enabled: false, state: 'NORMAL', reason: null, window: null, minutesToPause: null, endWindowUntil: null, pauseRecord: null, config: null, balance: null }
+    let snapshot: any = { enabled: false, state: 'NORMAL', reason: null, window: null, minutesToPause: null, endWindowUntil: null, pauseRecord: null, config: null, balance: null, goUsage: null }
     // Last successful balance fetch (ms) — the balance is refreshed on user
     // messages or every 5 minutes, not on every 30s poll.
     let lastBalanceAt = 0
@@ -139,9 +139,13 @@ return {
       try {
         const s = await callHost('save-money/status')
         if (s && typeof s === 'object') {
-          const prevBalance = snapshot.balance // keep the last shown balance across polls
+          // /status doesn't carry balance/goUsage — carry both across polls or
+          // they'd vanish on a refresh that skips the balance endpoint.
+          const prevBalance = snapshot.balance
+          const prevGoUsage = snapshot.goUsage
           snapshot = s
           snapshot.balance = prevBalance
+          snapshot.goUsage = prevGoUsage
           dirty = s.balanceDirty === true
           // Keep the UI language in sync with the persisted config choice
           if (s.config && typeof s.config.lang === 'string') currentLang = resolveLang(s.config.lang)
@@ -155,14 +159,19 @@ return {
       const BALANCE_MS = 5 * 60 * 1000
       const nowMs = Date.now()
       const due = (!lastBalanceAt || nowMs - lastBalanceAt > BALANCE_MS) && nowMs >= nextBalanceAttemptAt
-      if (snapshot.config && snapshot.config.showBalance === true && (dirty || due)) {
+      const showBal = !!(snapshot.config && snapshot.config.showBalance === true)
+      const showGo = !!(snapshot.config && snapshot.config.showOpenCodeGo === true)
+      if ((showBal || showGo) && (dirty || due)) {
         try {
           const b = await balanceWithTimeout(callHost('save-money/balance'), 4000, 'balance call timeout')
           // Only a successful response counts as "fetched": a failure keeps the
           // previous value (or null) and leaves lastBalanceAt stale, so the next
           // poll retries instead of waiting 5 minutes for the next refresh.
+          // ok:true covers any enabled sub-source (DeepSeek balance OR OpenCode
+          // Go usage), so the OpenCode Go usage survives a DeepSeek failure.
           if (b && typeof b === 'object' && b.ok === true) {
             snapshot.balance = b
+            snapshot.goUsage = b.goUsage || null
             lastBalanceAt = Date.now()
           } else {
             // Non-ok or unreachable: back off so a failing upstream is not
@@ -173,8 +182,9 @@ return {
           console.error('[save-money] balance fetch failed: ' + String((e && (e as any).message) || e))
           nextBalanceAttemptAt = Date.now() + BALANCE_RETRY_MS
         }
-      } else if (!(snapshot.config && snapshot.config.showBalance === true)) {
+      } else if (!showBal && !showGo) {
         snapshot.balance = null
+        snapshot.goUsage = null
         // Re-enabling the display must fetch immediately, not wait for the next
         // 5-minute or message-driven refresh: reset the staleness marker here,
         // otherwise `due` stays false and the balance never reappears.

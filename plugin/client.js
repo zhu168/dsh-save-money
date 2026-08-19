@@ -390,6 +390,21 @@ const zh = {
     sectionLabel: '省钱插件',
     settingsHeading: 'save-money 省钱插件',
     showBalance: '显示余额',
+    showOpenCodeGo: '显示 OpenCode Go 用量',
+    goTitle: 'OpenCode Go 用量（5小时/周/月）',
+    goWindow5h: '5小时',
+    goWindowWeek: '本周',
+    goWindowMonth: '本月',
+    goRemaining: '剩余',
+    goUsed: '已用',
+    goReset: '重置',
+    goNone: '无',
+    displayTitle: '显示数据源',
+    srcAuto: '自动（默认／首个可用）',
+    srcDeepseek: 'DeepSeek 官方',
+    srcGo: 'OpenCode Go',
+    srcInUse: '使用中',
+    srcChart: '最近8小时消费图',
     modelApplyTitle: '适用模型（勾选 = 窗口内暂停；不勾选 = 豁免）',
     modelApplyHint: '识别失败或未列出的模型（如其他第三方）一律豁免',
     applyOfficial: '官方 API',
@@ -451,6 +466,21 @@ const en = {
     sectionLabel: 'Save-money',
     settingsHeading: 'save-money plugin',
     showBalance: 'Show balance',
+    showOpenCodeGo: 'Show OpenCode Go usage',
+    goTitle: 'OpenCode Go usage (5h / week / month)',
+    goWindow5h: '5h',
+    goWindowWeek: 'week',
+    goWindowMonth: 'month',
+    goRemaining: 'left',
+    goUsed: 'used',
+    goReset: 'resets',
+    goNone: 'n/a',
+    displayTitle: 'Display source',
+    srcAuto: 'Auto (default / first available)',
+    srcDeepseek: 'DeepSeek official',
+    srcGo: 'OpenCode Go',
+    srcInUse: 'in use',
+    srcChart: 'Last 8h spend chart',
     modelApplyTitle: 'Apply to models (checked = pause in windows; unchecked = exempt)',
     modelApplyHint: 'Models not recognized or not listed (e.g. other third parties) are always exempt',
     applyOfficial: 'Official API',
@@ -512,6 +542,21 @@ const de = {
     sectionLabel: 'Sparmodus',
     settingsHeading: 'save-money Sparmodus',
     showBalance: 'Guthaben anzeigen',
+    showOpenCodeGo: 'OpenCode Go-Verbrauch anzeigen',
+    goTitle: 'OpenCode Go-Verbrauch (5 h / Woche / Monat)',
+    goWindow5h: '5h',
+    goWindowWeek: 'Woche',
+    goWindowMonth: 'Monat',
+    goRemaining: 'übrig',
+    goUsed: 'verbraucht',
+    goReset: 'Reset',
+    goNone: 'n/v',
+    displayTitle: 'Anzeigequelle',
+    srcAuto: 'Automatisch (Standard / erster verfügbarer)',
+    srcDeepseek: 'DeepSeek offiziell',
+    srcGo: 'OpenCode Go',
+    srcInUse: 'verwendet',
+    srcChart: 'Verbrauch letzte 8 Std.',
     modelApplyTitle: 'Gilt für Modelle (aktiviert = in Fenstern pausieren; deaktiviert = ausgenommen)',
     modelApplyHint: 'Nicht erkannte oder nicht aufgeführte Modelle (z. B. andere Drittanbieter) sind immer ausgenommen',
     applyOfficial: 'Offizielle API',
@@ -573,6 +618,21 @@ const fr = {
     sectionLabel: 'Économie',
     settingsHeading: 'Extension save-money',
     showBalance: 'Afficher le solde',
+    showOpenCodeGo: 'Afficher l\'utilisation OpenCode Go',
+    goTitle: 'Utilisation OpenCode Go (5 h / semaine / mois)',
+    goWindow5h: '5h',
+    goWindowWeek: 'semaine',
+    goWindowMonth: 'mois',
+    goRemaining: 'restant',
+    goUsed: 'utilisé',
+    goReset: 'réinit.',
+    goNone: 'n/d',
+    displayTitle: 'Source affichée',
+    srcAuto: 'Auto (par défaut / premier disponible)',
+    srcDeepseek: 'DeepSeek officiel',
+    srcGo: 'OpenCode Go',
+    srcInUse: 'utilisé',
+    srcChart: 'Consommation 8 dernières h',
     modelApplyTitle: 'Appliquer aux modèles (coché = suspendre pendant les fenêtres ; décoché = exempté)',
     modelApplyHint: 'Les modèles non reconnus ou non listés (ex. autres tiers) sont toujours exemptés',
     applyOfficial: 'API officielle',
@@ -634,6 +694,21 @@ const es = {
     sectionLabel: 'Ahorro',
     settingsHeading: 'Extensión save-money',
     showBalance: 'Mostrar saldo',
+    showOpenCodeGo: 'Mostrar uso de OpenCode Go',
+    goTitle: 'Uso de OpenCode Go (5 h / semana / mes)',
+    goWindow5h: '5h',
+    goWindowWeek: 'semana',
+    goWindowMonth: 'mes',
+    goRemaining: 'restante',
+    goUsed: 'usado',
+    goReset: 'reinicia',
+    goNone: 'n/d',
+    displayTitle: 'Origen de visualización',
+    srcAuto: 'Auto (predeterminado / primer disponible)',
+    srcDeepseek: 'DeepSeek oficial',
+    srcGo: 'OpenCode Go',
+    srcInUse: 'en uso',
+    srcChart: 'Gasto últimas 8 h',
     modelApplyTitle: 'Aplicar a modelos (marcado = pausar en ventanas; desmarcado = exento)',
     modelApplyHint: 'Los modelos no reconocidos o no listados (p. ej. otros terceros) siempre están exentos',
     applyOfficial: 'API oficial',
@@ -695,6 +770,21 @@ const it = {
     sectionLabel: 'Risparmio',
     settingsHeading: 'Estensione save-money',
     showBalance: 'Mostra saldo',
+    showOpenCodeGo: 'Mostra utilizzo OpenCode Go',
+    goTitle: 'Utilizzo OpenCode Go (5h / settimana / mese)',
+    goWindow5h: '5h',
+    goWindowWeek: 'settimana',
+    goWindowMonth: 'mese',
+    goRemaining: 'rimanente',
+    goUsed: 'usato',
+    goReset: 'reset',
+    goNone: 'n/d',
+    displayTitle: 'Sorgente visualizzata',
+    srcAuto: 'Auto (predefinito / primo disponibile)',
+    srcDeepseek: 'DeepSeek ufficiale',
+    srcGo: 'OpenCode Go',
+    srcInUse: 'in uso',
+    srcChart: 'Spesa ultime 8 h',
     modelApplyTitle: 'Applica ai modelli (selezionato = pausa nelle finestre; deselezionato = esente)',
     modelApplyHint: 'I modelli non riconosciuti o non elencati (es. altri terzi) sono sempre esenti',
     applyOfficial: 'API ufficiale',
@@ -756,6 +846,21 @@ const pt = {
     sectionLabel: 'Economia',
     settingsHeading: 'Extensão save-money',
     showBalance: 'Mostrar saldo',
+    showOpenCodeGo: 'Mostrar uso do OpenCode Go',
+    goTitle: 'Uso do OpenCode Go (5h / semana / mês)',
+    goWindow5h: '5h',
+    goWindowWeek: 'semana',
+    goWindowMonth: 'mês',
+    goRemaining: 'restante',
+    goUsed: 'usado',
+    goReset: 'reset',
+    goNone: 'n/d',
+    displayTitle: 'Fonte de exibição',
+    srcAuto: 'Auto (padrão / primeiro disponível)',
+    srcDeepseek: 'DeepSeek oficial',
+    srcGo: 'OpenCode Go',
+    srcInUse: 'em uso',
+    srcChart: 'Gasto últimas 8 h',
     modelApplyTitle: 'Aplicar a modelos (marcado = pausar nas janelas; desmarcado = isento)',
     modelApplyHint: 'Modelos não reconhecidos ou não listados (ex. outros terceiros) estão sempre isentos',
     applyOfficial: 'API oficial',
@@ -817,6 +922,21 @@ const ja = {
     sectionLabel: '節約プラグイン',
     settingsHeading: 'save-money 節約プラグイン',
     showBalance: '残高を表示',
+    showOpenCodeGo: 'OpenCode Go の使用量を表示',
+    goTitle: 'OpenCode Go の使用量（5時間/週/月）',
+    goWindow5h: '5時間',
+    goWindowWeek: '週',
+    goWindowMonth: '月',
+    goRemaining: '残り',
+    goUsed: '使用済み',
+    goReset: 'リセット',
+    goNone: 'なし',
+    displayTitle: '表示ソース',
+    srcAuto: '自動（デフォルト／最初に利用可能）',
+    srcDeepseek: 'DeepSeek 公式',
+    srcGo: 'OpenCode Go',
+    srcInUse: '使用中',
+    srcChart: '直近8時間の消費',
     modelApplyTitle: '適用モデル（チェック = ウィンドウ内で一時停止;外す = 対象外）',
     modelApplyHint: '認識できない・一覧にないモデル（他社など）は常に対象外',
     applyOfficial: '公式 API',
@@ -878,6 +998,21 @@ const ko = {
     sectionLabel: '절약 플러그인',
     settingsHeading: 'save-money 절약 플러그인',
     showBalance: '잔액 표시',
+    showOpenCodeGo: 'OpenCode Go 사용량 표시',
+    goTitle: 'OpenCode Go 사용량 (5시간/주/월)',
+    goWindow5h: '5시간',
+    goWindowWeek: '주',
+    goWindowMonth: '월',
+    goRemaining: '남음',
+    goUsed: '사용',
+    goReset: '리셋',
+    goNone: '없음',
+    displayTitle: '표시 소스',
+    srcAuto: '자동(기본 / 첫 번째 사용 가능)',
+    srcDeepseek: 'DeepSeek 공식',
+    srcGo: 'OpenCode Go',
+    srcInUse: '사용 중',
+    srcChart: '최근 8시간 소비',
     modelApplyTitle: '적용 모델 (체크 = 창 내 일시중지; 해제 = 면제)',
     modelApplyHint: '인식되지 않거나 목록에 없는 모델(예: 기타 제3자)은 항상 면제',
     applyOfficial: '공식 API',
@@ -939,6 +1074,21 @@ const zhTW = {
     sectionLabel: '省錢外掛',
     settingsHeading: 'save-money 省錢外掛',
     showBalance: '顯示餘額',
+    showOpenCodeGo: '顯示 OpenCode Go 用量',
+    goTitle: 'OpenCode Go 用量（5小時/週/月）',
+    goWindow5h: '5小時',
+    goWindowWeek: '本週',
+    goWindowMonth: '本月',
+    goRemaining: '剩餘',
+    goUsed: '已用',
+    goReset: '重置',
+    goNone: '無',
+    displayTitle: '顯示資料來源',
+    srcAuto: '自動（預設／第一個可用）',
+    srcDeepseek: 'DeepSeek 官方',
+    srcGo: 'OpenCode Go',
+    srcInUse: '使用中',
+    srcChart: '最近 8 小時消費圖',
     modelApplyTitle: '適用模型（勾選 = 視窗內暫停；不勾選 = 豁免）',
     modelApplyHint: '識別失敗或未列出的模型（如其他第三方）一律豁免',
     applyOfficial: '官方 API',
@@ -1284,7 +1434,7 @@ function createSettingsView(deps) {
         // and how to reset it.
         st.endWindowUntil ? React.createElement('div', { style: { margin: '6px 0 10px', fontSize: '12px', color: 'var(--dsw-alias-state-success-primary)', fontWeight: 600 } }, t('endWindowActive', { a: st.window ? st.window.pauseAt : '', b: st.window ? st.window.resumeAt : '', c: st.window ? st.window.resumeAt : '' })) : null, msg ? React.createElement('div', { style: { margin: '8px 0', fontSize: '12px', color: 'var(--dsw-alias-label-secondary)' } }, msg) : null, 
         // Enable + balance display share one row (two compact switches).
-        React.createElement('div', { style: { margin: '8px 0', display: 'flex', alignItems: 'center', gap: '18px', flexWrap: 'wrap' } }, switchRow(t('enable'), !!st.enabled, (v) => void doConfigure({ enabled: v })), switchRow(t('showBalance'), !!cfg.showBalance, (v) => void doConfigure({ showBalance: v }))), 
+        React.createElement('div', { style: { margin: '8px 0', display: 'flex', alignItems: 'center', gap: '18px', flexWrap: 'wrap' } }, switchRow(t('enable'), !!st.enabled, (v) => void doConfigure({ enabled: v })), switchRow(t('showBalance'), !!cfg.showBalance, (v) => void doConfigure({ showBalance: v })), switchRow(t('showOpenCodeGo'), !!cfg.showOpenCodeGo, (v) => void doConfigure({ showOpenCodeGo: v }))), 
         // Model tiers: checked = this tier pauses inside windows; unchecked =
         // exempt. Two rows — official / opencode — each with flash + pro
         // checkboxes side by side. Default is the two official tiers only;
@@ -1659,16 +1809,25 @@ function createBarChart(deps) {
  * dsh-save-money — Client UI: session-header entry (src/ui/header.tsx)
  *
  * The single persistent header entry (next to the Session log): the status
- * text, the account balance with its hover detail card, the settings popover,
- * the spend bar-chart popover and the floating pause banner. Registered in the
+ * text, a single switchable "provider display" chip, the settings popover, the
+ * spend bar-chart popover and the floating pause banner. Registered in the
  * conversation.session.header.utilities slot by the client body; this file
  * only renders — data and actions flow in through props.
  *
- * The balance hover card and the bar-chart tooltip are custom floating cards
- * (fixed + zIndex 10001): native `title` tooltips get clipped at the viewport
- * edge and cannot wrap, so the long text was invisible. Cards follow the
- * mouse and extend LEFT from the cursor (the balance sits at the right edge
- * of the header), clamped so they never leave the viewport.
+ * Provider display (the chip): the plugin supports several queryable
+ * "display sources" (deepseek-official monetary balance, opencode-go quota
+ * windows, ...). Which one is SHOWN follows cfg.displaySource:
+ *   - 'auto' (default): follow the provider of the most recent model request,
+ *     falling back to the first available source.
+ *   - a concrete id: always show that source (when available).
+ * Clicking the chip opens a small menu listing every available source so the
+ * user can pick which to display; the choice is persisted.
+ *
+ * Hover cards and the bar-chart tooltip are custom floating cards (fixed +
+ * zIndex 10001): native `title` tooltips get clipped at the viewport edge and
+ * cannot wrap, so the long text was invisible. Cards follow the mouse and
+ * extend LEFT from the cursor (the chip sits at the right edge of the header),
+ * clamped so they never leave the viewport.
  */
 /** Factory: build the HeaderEntry component bound to client deps + UI pieces. */
 function createHeaderEntry(deps, subs) {
@@ -1682,10 +1841,40 @@ function createHeaderEntry(deps, subs) {
         const onRefresh = props.onRefresh || (() => { });
         const [open, setOpen] = React.useState(false);
         const [barsOpen, setBarsOpen] = React.useState(false);
+        const [menuOpen, setMenuOpen] = React.useState(false);
+        const menuRef = React.useRef(null);
+        const chipRef = React.useRef(null);
+        // Clicking anywhere OUTSIDE the chip + menu closes the menu — a clear way
+        // to "cancel"/dismiss the source selector without changing the selection.
+        React.useEffect(() => {
+            if (!menuOpen)
+                return;
+            const onDown = (e) => {
+                const t = e && e.target;
+                if ((menuRef.current && menuRef.current.contains(t)) || (chipRef.current && chipRef.current.contains(t)))
+                    return;
+                setMenuOpen(false);
+            };
+            if (typeof document !== 'undefined' && document && typeof document.addEventListener === 'function') {
+                document.addEventListener('mousedown', onDown);
+                return () => document.removeEventListener('mousedown', onDown);
+            }
+        }, [menuOpen]);
+        // Position of the active source's hover detail card (null = hidden).
+        const [tip, setTip] = React.useState(null);
+        const updateTip = (e) => {
+            const vw = typeof window !== 'undefined' && window && typeof window.innerWidth === 'number' ? window.innerWidth : 1024;
+            const vh = typeof window !== 'undefined' && window && typeof window.innerHeight === 'number' ? window.innerHeight : 768;
+            const x = typeof e.clientX === 'number' ? e.clientX : vw;
+            const y = typeof e.clientY === 'number' ? e.clientY : 0;
+            const right = Math.max(8, Math.min(vw - 8, vw - x + 12));
+            const top = Math.max(8, Math.min(y + 14, vh - 200));
+            setTip({ right, top });
+        };
         const b = badgeInfo(st);
         // "Save" + symbol + status text all use the state color
         const text = React.createElement('span', {
-            onClick: () => setOpen(!open),
+            onClick: () => { setOpen(!open); setMenuOpen(false); },
             style: {
                 color: b.color, fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap',
                 padding: '4px 8px', cursor: 'pointer', borderRadius: '6px',
@@ -1694,83 +1883,221 @@ function createHeaderEntry(deps, subs) {
             },
             title: t('headerTitle', { status: b.text }),
         }, t('badgeLabel', { symbol: b.symbol, text: b.text }));
-        // Account balance (DeepSeek /user/balance) next to the status text —
-        // hidden when unavailable (no credential / request failed / not the
-        // official DeepSeek API). Implemented in src/balance-client.ts.
-        const balTipInit = null;
-        const [balTip, setBalTip] = React.useState(balTipInit);
-        const updateBalTip = (e) => {
-            const vw = typeof window !== 'undefined' && window && typeof window.innerWidth === 'number' ? window.innerWidth : 1024;
-            const vh = typeof window !== 'undefined' && window && typeof window.innerHeight === 'number' ? window.innerHeight : 768;
-            const x = typeof e.clientX === 'number' ? e.clientX : vw;
-            const y = typeof e.clientY === 'number' ? e.clientY : 0;
-            // Card right edge sits 12px left of the cursor and extends left;
-            // clamped so it never leaves the viewport on either side.
-            const right = Math.max(8, Math.min(vw - 8, vw - x + 12));
-            const top = Math.max(8, Math.min(y + 14, vh - 180));
-            setBalTip({ right, top });
+        // ---- Available display sources ----
+        const dsEnabled = !!(st.config && st.config.showBalance === true);
+        const goEnabled = !!(st.config && st.config.showOpenCodeGo === true);
+        const dsOk = !!(st.balance && typeof st.balance === 'object' && st.balance.ok === true
+            && Array.isArray(st.balance.balance) && st.balance.balance.length > 0);
+        const go = st.goUsage;
+        const goOk = !!(go && typeof go === 'object' && go.ok === true);
+        const balanceEl = dsOk ? renderBalanceElement(st.balance, React) : null;
+        // OpenCode Go plan-window usage (REMAINING percent per window + resets).
+        const remOf = (w) => {
+            if (w && typeof w.percent === 'number')
+                return Math.max(0, Math.round(100 - w.percent));
+            return null;
         };
-        // Balance visibility follows the MOST RECENT model request (dynamic
-        // multi-provider setups): show only while the latest actual request ran
-        // on the official DeepSeek provider. A provider switch hides the balance
-        // WITHOUT clearing the sampled history, so switching back to DeepSeek
-        // re-shows it immediately. `provider` is null before any request (fresh
-        // session) — show then too, the official account is queryable.
-        const balVisible = !!(st.balance && typeof st.balance === 'object'
-            && st.balance.ok === true
-            && (st.balance.provider === null || st.balance.provider === undefined || st.balance.provider === 'deepseek-official'));
-        const balanceEl = balVisible ? renderBalanceElement(st.balance, React) : null;
-        const balCard = (() => {
-            if (!balTip || !balanceEl)
+        const GO_WINS = [
+            { short: t('goWindow5h'), w: go && go.rolling },
+            { short: t('goWindowWeek'), w: go && go.weekly },
+            { short: t('goWindowMonth'), w: go && go.monthly },
+        ];
+        const goText = goOk
+            ? 'OpenCode Go ▸ ' + GO_WINS.map((g) => {
+                const r = remOf(g.w);
+                return g.short + ' ' + (r === null ? '–' : r + '%');
+            }).join(' · ')
+            : '';
+        const goTime = (iso, tzShow) => {
+            try {
+                const d = new Date(iso);
+                if (isNaN(d.getTime()))
+                    return null;
+                const wc = wallClock(tzShow, d);
+                return String(Math.floor(wc.minutes / 60)).padStart(2, '0') + ':' + String(wc.minutes % 60).padStart(2, '0');
+            }
+            catch (e) {
                 return null;
-            const lines = balanceDetailLines(st.balance, { h1: t('spendH1'), m10: t('spendM10'), h24: t('spendH24') });
-            if (!lines)
+            }
+        };
+        // Ordered list of sources that are BOTH enabled and actually carrying data.
+        const available = [
+            { id: 'deepseek-official', label: t('srcDeepseek'), on: dsEnabled && dsOk, textEl: balanceEl, go: false },
+            { id: 'opencode-go', label: t('srcGo'), on: goEnabled && goOk, textEl: null, go: true },
+        ].filter((s) => s.on);
+        // Which source to SHOW: the pinned displaySource if available, else the
+        // first available. Availability never follows the last-used provider, so
+        // the chip doesn't jump between conversations.
+        const displaySource = st.config && st.config.displaySource;
+        let activeId = null;
+        if (available.length > 0) {
+            if (displaySource && displaySource !== 'auto' && available.some((s) => s.id === displaySource)) {
+                activeId = displaySource;
+            }
+            else {
+                activeId = available[0].id;
+            }
+        }
+        const activeSrc = available.find((s) => s.id === activeId) || null;
+        // The single header chip: shows the active source's value, click to pick.
+        const chipContent = activeSrc
+            ? (activeSrc.go
+                ? React.createElement('span', { style: { fontSize: '12px', fontWeight: 600 } }, goText)
+                : balanceEl)
+            : null;
+        const chip = activeSrc
+            ? React.createElement('span', {
+                ref: chipRef,
+                onClick: (e) => {
+                    e.stopPropagation();
+                    setTip(null);
+                    setBarsOpen(false);
+                    setOpen(false); // don't overlap the settings popover (same anchor)
+                    setMenuOpen((v) => !v);
+                },
+                onMouseEnter: updateTip,
+                onMouseMove: updateTip,
+                onMouseLeave: () => setTip(null),
+                title: t('displayTitle'),
+                style: {
+                    color: 'var(--dsw-alias-label-secondary)', fontSize: '12px', fontWeight: 600,
+                    whiteSpace: 'nowrap', marginRight: '8px', cursor: 'pointer', pointerEvents: 'auto',
+                    padding: '2px 6px', borderRadius: '6px',
+                    border: '1px solid var(--dsw-alias-border-l1)',
+                },
+            }, chipContent, React.createElement('span', { style: { marginLeft: '4px', opacity: 0.7 } }, '▾'))
+            : null;
+        // Hover detail card for the ACTIVE source.
+        const detailCard = (() => {
+            if (!tip || !activeSrc)
                 return null;
-            // Append the exact wall-clock window to the m10/h1 lines (same source
-            // and alignment as the bar chart): "Last 1h spend 07:00–08:00 ¥1.25".
-            // h24 spans days, so it gets no range to avoid ambiguity.
-            const sa = st.balance && st.balance.spendAt;
-            if (sa && typeof sa.m10 === 'number' && typeof sa.h1 === 'number') {
-                try {
-                    const tzShow = (st.config && typeof st.config.timezone === 'string' && st.config.timezone.length > 0)
-                        ? st.config.timezone
-                        : detectedTz;
-                    const fmt = (tt) => {
-                        const wc = wallClock(tzShow, new Date(tt));
-                        return String(Math.floor(wc.minutes / 60)).padStart(2, '0') + ':' + String(wc.minutes % 60).padStart(2, '0');
-                    };
-                    if (lines.length >= 2)
-                        lines[1] += ' ' + fmt(sa.h1) + '–' + fmt(sa.h1 + 60 * 60 * 1000);
-                    if (lines.length >= 3)
-                        lines[2] += ' ' + fmt(sa.m10) + '–' + fmt(sa.m10 + 10 * 60 * 1000);
+            if (!activeSrc.go) {
+                const lines = balanceDetailLines(st.balance, { h1: t('spendH1'), m10: t('spendM10'), h24: t('spendH24') });
+                if (!lines)
+                    return null;
+                const sa = st.balance && st.balance.spendAt;
+                if (sa && typeof sa.m10 === 'number' && typeof sa.h1 === 'number') {
+                    try {
+                        const tzShow = (st.config && typeof st.config.timezone === 'string' && st.config.timezone.length > 0)
+                            ? st.config.timezone : detectedTz;
+                        const fmt = (tt) => {
+                            const wc = wallClock(tzShow, new Date(tt));
+                            return String(Math.floor(wc.minutes / 60)).padStart(2, '0') + ':' + String(wc.minutes % 60).padStart(2, '0');
+                        };
+                        if (lines.length >= 2)
+                            lines[1] += ' ' + fmt(sa.h1) + '–' + fmt(sa.h1 + 60 * 60 * 1000);
+                        if (lines.length >= 3)
+                            lines[2] += ' ' + fmt(sa.m10) + '–' + fmt(sa.m10 + 10 * 60 * 1000);
+                    }
+                    catch (e) { /* keep the unlabelled lines on any tz error */ }
                 }
-                catch (e) { /* keep the unlabelled lines on any tz error */ }
+                return React.createElement('div', {
+                    style: {
+                        position: 'fixed', right: tip.right, top: tip.top, zIndex: 10001,
+                        background: 'var(--dsw-alias-bg-layer-2)', color: 'var(--dsw-alias-label-primary)',
+                        borderRadius: '8px', border: '1px solid var(--dsw-alias-border-l1)',
+                        boxShadow: '0 6px 24px rgba(0,0,0,0.35)',
+                        padding: '6px 10px', fontSize: '12px', lineHeight: '1.6',
+                        maxWidth: 'min(340px, calc(100vw - 24px))',
+                        whiteSpace: 'normal', overflowWrap: 'break-word', pointerEvents: 'none',
+                    },
+                }, lines.map((ln, i) => React.createElement('div', {
+                    key: i, style: i === 0 ? { fontWeight: 700 } : { color: 'var(--dsw-alias-label-secondary)' },
+                }, ln)));
+            }
+            // OpenCode Go detail
+            const tzShow = (st.config && typeof st.config.timezone === 'string' && st.config.timezone.length > 0)
+                ? st.config.timezone : detectedTz;
+            const glines = [t('goTitle')];
+            for (const g of GO_WINS) {
+                const r = remOf(g.w);
+                let ln = g.short + ' ' + (r === null ? t('goNone') : r + '% ' + t('goRemaining'));
+                if (g.w && typeof g.w.percent === 'number')
+                    ln += ' (' + Math.round(g.w.percent) + '% ' + t('goUsed') + ')';
+                const tm = goTime(g.w && g.w.resetsAt, tzShow);
+                if (tm)
+                    ln += ' · ' + t('goReset') + ' ' + tm;
+                glines.push(ln);
             }
             return React.createElement('div', {
                 style: {
-                    position: 'fixed', right: balTip.right, top: balTip.top, zIndex: 10001,
+                    position: 'fixed', right: tip.right, top: tip.top, zIndex: 10001,
                     background: 'var(--dsw-alias-bg-layer-2)', color: 'var(--dsw-alias-label-primary)',
                     borderRadius: '8px', border: '1px solid var(--dsw-alias-border-l1)',
                     boxShadow: '0 6px 24px rgba(0,0,0,0.35)',
                     padding: '6px 10px', fontSize: '12px', lineHeight: '1.6',
                     maxWidth: 'min(340px, calc(100vw - 24px))',
-                    whiteSpace: 'normal', overflowWrap: 'break-word',
-                    pointerEvents: 'none',
+                    whiteSpace: 'normal', overflowWrap: 'break-word', pointerEvents: 'none',
                 },
-            }, lines.map((ln, i) => React.createElement('div', {
-                key: i,
-                style: i === 0 ? { fontWeight: 700 } : { color: 'var(--dsw-alias-label-secondary)' },
+            }, glines.map((ln, i) => React.createElement('div', {
+                key: i, style: i === 0 ? { fontWeight: 700 } : { color: 'var(--dsw-alias-label-secondary)' },
             }, ln)));
         })();
+        // Source-selection menu.
+        const menu = menuOpen
+            ? React.createElement('div', {
+                ref: menuRef,
+                style: {
+                    position: 'fixed', right: '16px', top: '56px', width: '340px',
+                    background: 'var(--dsw-alias-bg-layer-2)', color: 'var(--dsw-alias-label-primary)',
+                    borderRadius: '10px', boxShadow: '0 6px 24px rgba(0,0,0,0.35)',
+                    padding: '6px 8px 8px', zIndex: 10000,
+                    border: '1px solid var(--dsw-alias-border-l1)', pointerEvents: 'auto',
+                },
+            }, React.createElement('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 6px 2px' } }, React.createElement('span', { style: { fontSize: '13px', fontWeight: 700 } }, t('displayTitle')), React.createElement('button', {
+                onClick: () => setMenuOpen(false),
+                style: { border: 'none', background: 'transparent', cursor: 'pointer', fontSize: '14px', color: 'var(--dsw-alias-label-secondary)', pointerEvents: 'auto' },
+            }, '✕')), 
+            // auto + one row per available source
+            [null].concat(available).map((src, i) => {
+                const isAuto = src === null;
+                const key = isAuto ? 'auto' : src.id;
+                // The checkmark reflects the PINNED config choice (displaySource),
+                // so in 'auto' only the "Auto" row is checked — never two at once.
+                const selected = isAuto ? (!displaySource || displaySource === 'auto') : (displaySource === src.id);
+                const name = isAuto ? t('srcAuto') : src.label;
+                return React.createElement('div', {
+                    key,
+                    onClick: () => {
+                        // Apply the choice but KEEP the menu open so the checkmark
+                        // moves visibly instead of the menu vanishing on click.
+                        void actions.doConfigure({ displaySource: isAuto ? 'auto' : src.id });
+                    },
+                    style: {
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '7px 8px',
+                        borderRadius: '6px', cursor: 'pointer', pointerEvents: 'auto',
+                        background: selected ? 'var(--dsw-alias-bg-layer-1)' : 'transparent',
+                        fontSize: '13px',
+                    },
+                }, React.createElement('span', { style: { width: '14px', flexShrink: 0, color: 'var(--dsw-alias-brand-primary)' } }, selected ? '✓' : ''), React.createElement('span', { style: { flex: 1 } }, name), !isAuto && src.go
+                    ? React.createElement('span', {
+                        style: { fontSize: '11px', color: 'var(--dsw-alias-label-secondary)', whiteSpace: 'nowrap', maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis' },
+                    }, goText)
+                    : (!isAuto && !src.go ? balanceEl : null));
+            }), 
+            // DeepSeek spend chart access (only when active = deepseek)
+            activeSrc && !activeSrc.go
+                ? React.createElement('div', {
+                    onClick: (e) => {
+                        e.stopPropagation();
+                        setMenuOpen(false);
+                        setBarsOpen(true);
+                        onRefresh();
+                    },
+                    style: {
+                        marginTop: '4px', padding: '7px 8px', borderRadius: '6px', cursor: 'pointer',
+                        pointerEvents: 'auto', fontSize: '13px', color: 'var(--dsw-alias-label-secondary)',
+                        borderTop: '1px solid var(--dsw-alias-border-l1)',
+                    },
+                }, t('srcChart'))
+                : null)
+            : null;
         const pop = open
             ? React.createElement('div', {
                 style: {
                     position: 'fixed', right: '16px', top: '56px', width: '380px',
-                    // bg-layer-2: pure white in light themes, coordinated dark in dark
-                    // themes — follows the theme automatically
                     background: 'var(--dsw-alias-bg-layer-2)', color: 'var(--dsw-alias-label-primary)',
-                    borderRadius: '10px',
-                    boxShadow: '0 6px 24px rgba(0,0,0,0.35)', padding: '4px 8px 8px',
+                    borderRadius: '10px', boxShadow: '0 6px 24px rgba(0,0,0,0.35)', padding: '4px 8px 8px',
                     zIndex: 10000, border: '1px solid var(--dsw-alias-border-l1)', maxHeight: '70vh', overflowY: 'auto',
                     pointerEvents: 'auto',
                 },
@@ -1779,14 +2106,13 @@ function createHeaderEntry(deps, subs) {
                 style: { border: 'none', background: 'transparent', cursor: 'pointer', fontSize: '14px', color: 'var(--dsw-alias-label-secondary)', pointerEvents: 'auto' },
             }, '✕')), React.createElement(SettingsView, { st, ...actions }))
             : null;
-        // Spend bar-chart popup (click the balance): last 8h per 10 min.
+        // Spend bar-chart popup (clicked from the source menu): last 8h per 10 min.
         const chartPopup = barsOpen && balanceEl
             ? React.createElement('div', {
                 style: {
                     position: 'fixed', right: '16px', top: '56px', width: '420px',
                     background: 'var(--dsw-alias-bg-layer-2)', color: 'var(--dsw-alias-label-primary)',
-                    borderRadius: '10px',
-                    boxShadow: '0 6px 24px rgba(0,0,0,0.35)', padding: '4px 8px 8px',
+                    borderRadius: '10px', boxShadow: '0 6px 24px rgba(0,0,0,0.35)', padding: '4px 8px 8px',
                     zIndex: 10000, border: '1px solid var(--dsw-alias-border-l1)', pointerEvents: 'auto',
                 },
             }, React.createElement('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 6px 0' } }, React.createElement('span', { style: { fontSize: '13px', fontWeight: 700 } }, t('barsTitle')), React.createElement('button', {
@@ -1800,27 +2126,7 @@ function createHeaderEntry(deps, subs) {
                     : '¥',
             }))
             : null;
-        return React.createElement('div', { style: { display: 'contents' } }, text, balanceEl
-            ? React.createElement('div', {
-                style: { display: 'contents', cursor: 'pointer' },
-                onMouseEnter: updateBalTip,
-                onMouseMove: updateBalTip,
-                onMouseLeave: () => setBalTip(null),
-                onClick: (e) => {
-                    e.stopPropagation();
-                    setBalTip(null); // clear the hover card so it cannot cover the popup
-                    setBarsOpen((v) => {
-                        const opening = !v;
-                        if (opening) {
-                            // Force one refresh when opening so the chart reflects the
-                            // newest samples (the host 5-min sampler does not push).
-                            onRefresh();
-                        }
-                        return !v;
-                    }); // clicking again closes (toggle)
-                },
-            }, balanceEl, balCard)
-            : null, pop, chartPopup, React.createElement(FloatingBanner, { st, doEndWindow: actions.doEndWindow }));
+        return React.createElement('div', { style: { display: 'contents' } }, text, chip, detailCard, menu, pop, chartPopup, React.createElement(FloatingBanner, { st, doEndWindow: actions.doEndWindow }));
     };
     return HeaderEntry;
 }
@@ -1899,7 +2205,7 @@ return {
         // Client UI bound to the shared deps: the reactive translator reads
         // currentLang at call time, so UI text follows the persisted language.
         const ui = createUi({ t: translate, detectedTz, DSHButton });
-        let snapshot = { enabled: false, state: 'NORMAL', reason: null, window: null, minutesToPause: null, endWindowUntil: null, pauseRecord: null, config: null, balance: null };
+        let snapshot = { enabled: false, state: 'NORMAL', reason: null, window: null, minutesToPause: null, endWindowUntil: null, pauseRecord: null, config: null, balance: null, goUsage: null };
         // Last successful balance fetch (ms) — the balance is refreshed on user
         // messages or every 5 minutes, not on every 30s poll.
         let lastBalanceAt = 0;
@@ -1920,9 +2226,13 @@ return {
             try {
                 const s = await callHost('save-money/status');
                 if (s && typeof s === 'object') {
-                    const prevBalance = snapshot.balance; // keep the last shown balance across polls
+                    // /status doesn't carry balance/goUsage — carry both across polls or
+                    // they'd vanish on a refresh that skips the balance endpoint.
+                    const prevBalance = snapshot.balance;
+                    const prevGoUsage = snapshot.goUsage;
                     snapshot = s;
                     snapshot.balance = prevBalance;
+                    snapshot.goUsage = prevGoUsage;
                     dirty = s.balanceDirty === true;
                     // Keep the UI language in sync with the persisted config choice
                     if (s.config && typeof s.config.lang === 'string')
@@ -1938,14 +2248,19 @@ return {
             const BALANCE_MS = 5 * 60 * 1000;
             const nowMs = Date.now();
             const due = (!lastBalanceAt || nowMs - lastBalanceAt > BALANCE_MS) && nowMs >= nextBalanceAttemptAt;
-            if (snapshot.config && snapshot.config.showBalance === true && (dirty || due)) {
+            const showBal = !!(snapshot.config && snapshot.config.showBalance === true);
+            const showGo = !!(snapshot.config && snapshot.config.showOpenCodeGo === true);
+            if ((showBal || showGo) && (dirty || due)) {
                 try {
                     const b = await balanceWithTimeout(callHost('save-money/balance'), 4000, 'balance call timeout');
                     // Only a successful response counts as "fetched": a failure keeps the
                     // previous value (or null) and leaves lastBalanceAt stale, so the next
                     // poll retries instead of waiting 5 minutes for the next refresh.
+                    // ok:true covers any enabled sub-source (DeepSeek balance OR OpenCode
+                    // Go usage), so the OpenCode Go usage survives a DeepSeek failure.
                     if (b && typeof b === 'object' && b.ok === true) {
                         snapshot.balance = b;
+                        snapshot.goUsage = b.goUsage || null;
                         lastBalanceAt = Date.now();
                     }
                     else {
@@ -1959,8 +2274,9 @@ return {
                     nextBalanceAttemptAt = Date.now() + BALANCE_RETRY_MS;
                 }
             }
-            else if (!(snapshot.config && snapshot.config.showBalance === true)) {
+            else if (!showBal && !showGo) {
                 snapshot.balance = null;
+                snapshot.goUsage = null;
                 // Re-enabling the display must fetch immediately, not wait for the next
                 // 5-minute or message-driven refresh: reset the staleness marker here,
                 // otherwise `due` stays false and the balance never reappears.
